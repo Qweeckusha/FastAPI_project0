@@ -15,17 +15,18 @@ body {
     background-color: #111;
     overflow-x: hidden;
     transition: 0.3s;
-    padding-top: 60px;
+    padding-top: 80px;
 }
 
 .sidebar a {
-    padding: 8px 8px 8px 16px;
+    padding: 25px 8px 8px 16px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
     display: flex;
     align-items: center;
     transition: 0.3s;
+
 }
 
 .sidebar a:hover {
@@ -48,7 +49,7 @@ body {
     padding: 0;
     border: none;
     position: fixed;
-    top: 10px;
+    top: 30px;
     left: 20px;
     z-index: 1;
     background: none;
@@ -73,4 +74,14 @@ body {
 
 .content-shift {
     margin-left: 250px;
+}
+
+#header {
+    width: 100%;
+    text-align: center;
+    background-color: #111;
+}
+
+#header img {
+    height: 100px;
 }
