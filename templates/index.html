@@ -6,40 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TEST</title>
     <link rel="stylesheet" href="/static/css/main.css">
+    <script src="https://kit.fontawesome.com/2caf57c0de.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="">
-
+    <div id="sidebar" class="sidebar">
+        <a href="#">
+            <i class="fa-solid fa-house"></i>
+            <span class="sidebar-text">Home</span>
+        </a>
+        <a href="#">
+            <i class="fa-solid fa-user"></i>
+            <span class="sidebar-text">About</span>
+        </a>
+        <a href="#">
+            <i class="fa-solid fa-phone"></i>
+            <span class="sidebar-text">Contact</span>
+        </a>
     </div>
-    <h1>Hello, FastAPI!</h1>
-    <p>Welcome to your first FastAPI-powered page.</p>
 
-    <form id="regForm" action="/add_user" method="post">
-        <label>Логин: </label>
-        <input id="username" name="username" type="text" placeholder="Введите логин">
-        <label>Пароль: </label>
-        <input id="password" name="password" type="password" placeholder="Пароль">
-        <button type="submit">Зарегистрировать</button>
-    </form>
-    <hr>
+    <div id="main-content">
+        <button class="togglebtn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <h2>Welcome to the main content area</h2>
+        <p>Click the button to toggle the sidebar.</p>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Password</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.hashed_password }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <script src="static/js/scripts.js"></script>
 </body>
+
 </html>

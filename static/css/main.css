@@ -1,10 +1,76 @@
+/* Основные стили */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
+    padding: 0;
+    overflow-x: hidden;
 }
 
-h1 {
-    color: #333;
+.sidebar {
+    height: 100%;
+    width: 60px; /* Начальная ширина для отображения только иконок */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+}
+
+.sidebar a {
+    padding: 8px 8px 8px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.sidebar i {
+    margin-right: 16px; /* Отступ для иконок */
+}
+
+.sidebar .sidebar-text {
+    display: none; /* Текст скрыт по умолчанию */
+}
+
+.togglebtn {
+    font-size: 25px;
+    font-weight: 800;
+    cursor: pointer;
+    color: #818181;
+    padding: 0;
+    border: none;
+    position: fixed;
+    top: 10px;
+    left: 20px;
+    z-index: 1;
+    background: none;
+}
+
+.togglebtn:hover {
+    color: #f1f1f1;
+}
+
+#main-content {
+    margin: 20px 0 0 80px; /* Начальное смещение основного контента */
+    transition: margin-left 0.3s;
+}
+
+.sidebar-open {
+    width: 250px; /* Ширина открытой боковой панели */
+}
+
+.sidebar-open .sidebar-text {
+    display: inline; /* Показываем текст при открытой панели */
+}
+
+.content-shift {
+    margin-left: 250px;
 }

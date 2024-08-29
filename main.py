@@ -22,10 +22,9 @@ async def read_root(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/add_user", response_class=HTMLResponse)
 async def add_user(request: Request, username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    new_user = User(username=username, hashed_password=hashed_password.decode('utf-8'))
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    users = db.query(User).all()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    with db:
+        db.add(User(username=username, hashed_password=hashed_password))
+        db.commit()
+        users = db.query(User).all()
     return templates.TemplateResponse('index.html', {"request": request, "users": users})
