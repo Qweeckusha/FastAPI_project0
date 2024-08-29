@@ -1,0 +1,45 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TEST</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <div id="">
+
+    </div>
+    <h1>Hello, FastAPI!</h1>
+    <p>Welcome to your first FastAPI-powered page.</p>
+
+    <form id="regForm" action="/add_user" method="post">
+        <label>Логин: </label>
+        <input id="username" name="username" type="text" placeholder="Введите логин">
+        <label>Пароль: </label>
+        <input id="password" name="password" type="password" placeholder="Пароль">
+        <button type="submit">Зарегистрировать</button>
+    </form>
+    <hr>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.hashed_password }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
