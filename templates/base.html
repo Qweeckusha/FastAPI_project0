@@ -1,0 +1,42 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    {% block css%}{% endblock%}
+    <script src="https://kit.fontawesome.com/2caf57c0de.js" crossorigin="anonymous"></script>
+    {% block js%}{% endblock%}
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <button class="togglebtn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <a href="/">
+            <i class="fa-solid fa-house"></i>
+            <span class="sidebar-text">Главная</span>
+        </a>
+        <a href="/about">
+            <i class="fa-solid fa-user"></i>
+            <span class="sidebar-text">О нас</span>
+        </a>
+        <a href="#">
+            <i class="fa-solid fa-bullhorn"></i>
+            <span class="sidebar-text">События</span>
+        </a>
+    </div>
+
+    
+    <div id="header">
+        <img src="static/img/kairos_full_white.png" alt="kairos-logo">
+    </div>
+
+    <div id="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="static/js/scripts.js"></script>
+</body>
+
+</html>

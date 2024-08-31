@@ -1,87 +1,58 @@
-/* Основные стили */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+.carousel {
+    position: relative;
+    max-width: 50%; 
+    margin: auto;
+    overflow: hidden;
+    border: 2px solid #111;
 }
 
-.sidebar {
-    height: 100%;
-    width: 60px; /* Начальная ширина для отображения только иконок */
-    position: fixed;
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%;
+    transition: opacity 0.5s ease-in-out;
+    padding-top: 56.25%;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    position: absolute;
     top: 0;
     left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    transition: 0.3s;
-    padding-top: 80px;
-}
-
-.sidebar a {
-    padding: 25px 8px 8px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: flex;
-    align-items: center;
-    transition: 0.3s;
-
-}
-
-.sidebar a:hover {
-    color: #f1f1f1;
-}
-
-.sidebar i {
-    margin-right: 16px; /* Отступ для иконок */
-}
-
-.sidebar .sidebar-text {
-    display: none; /* Текст скрыт по умолчанию */
-}
-
-.togglebtn {
-    font-size: 25px;
-    font-weight: 800;
-    cursor: pointer;
-    color: #818181;
-    padding: 0;
-    border: none;
-    position: fixed;
-    top: 30px;
-    left: 20px;
-    z-index: 1;
-    background: none;
-}
-
-.togglebtn:hover {
-    color: #f1f1f1;
-}
-
-#main-content {
-    margin: 20px 0 0 80px; /* Начальное смещение основного контента */
-    transition: margin-left 0.3s;
-}
-
-.sidebar-open {
-    width: 250px; /* Ширина открытой боковой панели */
-}
-
-.sidebar-open .sidebar-text {
-    display: inline; /* Показываем текст при открытой панели */
-}
-
-.content-shift {
-    margin-left: 250px;
-}
-
-#header {
     width: 100%;
-    text-align: center;
-    background-color: #111;
+    height: 100%;
+    object-fit: cover; /* Масштабирование изображения для заполнения контейнера */
 }
 
-#header img {
-    height: 100px;
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    color: #7e7e7e;
+    text-shadow: 2px 3px 1px #111;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+    transform: translateY(-50%);
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    border-radius: 50%;
+}
+
+.carousel-control-prev {
+    left: 10px;
+}
+
+.carousel-control-next {
+    right: 10px;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background-color: rgba(0, 0, 0, 0.081);
 }

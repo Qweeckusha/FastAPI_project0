@@ -1,0 +1,86 @@
+@font-face {
+    font-family: 'Alkalami';
+    src: url('/static/fonts/Alkalami.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Bitter';
+    src: url('/static/fonts/Bitter.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#main-content {
+    margin: 0px 0 0 60px; /* Начальное смещение основного контента */
+    transition: margin-left 0.3s;
+    font-size: 20px;
+}
+
+#info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+#contacts, #address {
+    flex: 1;
+    padding: 5px 20px;
+    border: 2px solid #111;
+    border-radius: 15px;
+    margin: 10px;
+    box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.444);
+}
+
+#address {
+    margin-left: 30px;
+}
+
+#address, #contacts h3 {
+    font-size: 24px;
+}
+
+#address, #contacts li {
+    font-size: 20px;
+}
+
+.full-background {
+    display: flex;
+    background-image: url('/static/img/bg_about.jpeg');
+    background-size: cover; /* Покрывает всю ширину и высоту экрана */
+    background-position: center; /* Центрирует изображение */
+    background-repeat: no-repeat; /* Не повторяет изображение */
+    background-attachment: fixed; /* Фиксирует фон на месте */
+    height: 90%; /* Высота фона 100% экрана */
+    z-index: -1;
+    justify-content: center;
+
+}
+
+#center {
+    margin-top: 12%;
+    background-color: #1111117d;
+    border-radius: 15px;
+    padding: 10px;
+    width: 300px;
+    text-align: center;
+    height: 30%;
+    color: #f1f1f1;
+    text-shadow: 2px 3px 3px #111;
+    box-shadow: 4px 8px 8px #111;
+}
+
+#center h2 {
+    font-family: Alkalami, sans-serif;
+    font-weight: 400;
+}
+
+#center h4 {
+    font-family: Bitter, sans-serif;
+    font-weight: 400;
+}
+
+.content {
+    margin: 10px 10px 50px 20px;
+}
