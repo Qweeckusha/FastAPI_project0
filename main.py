@@ -30,6 +30,9 @@ async def read_root(request: Request):
 async def about_page(request: Request):
     return templates.TemplateResponse('about.html', {"request": request})
 
+@app.get('/promo', response_class=HTMLResponse)
+async def promo_page(request: Request):
+    return templates.TemplateResponse('promo.html', {"request": request})
 
 @app.post("/add_user", response_class=HTMLResponse)
 async def add_user(request: Request, username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
