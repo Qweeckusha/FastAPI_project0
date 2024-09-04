@@ -69,13 +69,14 @@ def get_current_user(access_token: str = Cookie(None), db: Session = Depends(get
         payload = jwt.decode(access_token.split(" ")[1], SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
+            return None
+
+    except JWTError as e:
+        raise e
 
     user = db.query(User).filter(User.username == username).first()
     if user is None:
-        raise credentials_exception
+        return None
     return user
 
 def get_current_admin_user(current_user: User = Depends(get_current_user)):
