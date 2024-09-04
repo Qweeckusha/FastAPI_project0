@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, create_engine
+from sqlalchemy import Boolean, Column, Integer, LargeBinary, String, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from passlib.context import CryptContext
 
@@ -36,6 +36,17 @@ class User(Base):
     @property
     def is_authenticated(self):
         return True
+    
+class Products(Base):
+    __tablename__ = "products"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), unique=False)
+    description = Column(String(1200))
+    pic = Column(LargeBinary)
+    cost = Column(Integer)
+    materials = Column(String(255))
+    filler = Column(String(255))
 
 # Создание таблиц в базе данных
 Base.metadata.create_all(bind=engine)
