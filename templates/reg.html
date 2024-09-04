@@ -15,6 +15,9 @@
         <input type="password" id="password" name="password" required>
         <br>
         <button type="submit">Зарегистрироваться</button>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
     </form>
 </body>
 </html>

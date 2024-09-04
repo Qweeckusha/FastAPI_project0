@@ -1,5 +1,5 @@
 import bcrypt
-from fastapi import FastAPI, Request, Depends, Form, HTTPException
+from fastapi import Cookie, FastAPI, Request, Depends, Form, HTTPException, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -19,7 +19,7 @@ templates = Jinja2Templates(directory='templates')
 Base.metadata.create_all(bind=engine)
 
 # Настройки для токенов
-SECRET_KEY = "your-secret-key"
+SECRET_KEY = "GjhbdfgjHbJK76JjhgLSds68jJd9"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -27,6 +27,13 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+
+
+
+
+# Funcs --------------------------------------------------------------
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -53,6 +60,36 @@ def authenticate_user(db, username: str, password: str):
         return False
     return user
 
+
+def get_current_user(access_token: str = Cookie(None), db: Session = Depends(get_db)):
+    if access_token is None:
+        return None
+
+    try:
+        payload = jwt.decode(access_token.split(" ")[1], SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise credentials_exception
+    return user
+
+def get_current_admin_user(current_user: User = Depends(get_current_user)):
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Access denied")
+    return current_user
+
+
+
+
+
+
+# Middleware --------------------------------------------------------------
+
 @app.middleware("http")
 async def add_cache_control_headers(request: Request, call_next):
     response = await call_next(request)
@@ -61,9 +98,22 @@ async def add_cache_control_headers(request: Request, call_next):
     response.headers['Expires'] = '0'
     return response
 
+
+
+
+
+
+# Routers --------------------------------------------------------------
+
 @app.get('/', response_class=HTMLResponse)
-async def read_root(request: Request):
-    return templates.TemplateResponse('index.html', {"request": request})
+async def read_root(request: Request, current_user: User = Depends(get_current_user)):
+    try:
+        return templates.TemplateResponse('index.html', {"request": request, "user": current_user})
+    except HTTPException as e:
+        if e.status_code == status.HTTP_401_UNAUTHORIZED:
+            return templates.TemplateResponse('index.html', {"request": request, "user": None})
+        raise e
+            
 
 @app.get('/about', response_class=HTMLResponse)
 async def about_page(request: Request):
@@ -77,12 +127,34 @@ async def promo_page(request: Request):
 async def register_form(request: Request):
     return templates.TemplateResponse("reg.html", {"request": request})
 
+@app.get("/login", response_class=HTMLResponse)
+async def login_form(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/logout")
+async def logout():
+    response = RedirectResponse(url="/")
+    response.delete_cookie(key="access_token")  # Удаляем access_token из куки
+    return response
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request, current_user: User = Depends(get_current_admin_user)):
+    return templates.TemplateResponse("dashboard.html", {"request": request, "user": current_user})
+
+
+
+
+
+
+# Handlers --------------------------------------------------------------
+
 @app.post("/register", response_class=HTMLResponse)
 async def register_user(request: Request, username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
     # Проверка на наличие пользователя с таким же логином
     user = db.query(User).filter(User.username == username).first()
     if user:
-        raise HTTPException(status_code=400, detail="Username already taken")
+        return templates.TemplateResponse("reg.html", {"request": request, "error": 'Пользователь с таким именем уже есть.', "success": None})
+            
     
     hashed_password = get_password_hash(password)
     db_user = User(username=username, hashed_password=hashed_password)
@@ -91,20 +163,14 @@ async def register_user(request: Request, username: str = Form(...), password: s
     db.commit()
     db.refresh(db_user)
     
-    return RedirectResponse(url="/login", status_code=303)
-
-@app.get("/login", response_class=HTMLResponse)
-async def login_form(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request, "success": "Регистрация прошла успешно. Теперь вы можете войти."})
 
 @app.post("/login")
 async def login_for_access_token(request: Request, db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
-        raise HTTPException(
-            status_code=400,
-            detail="Incorrect username or password"
-        )
+        return templates.TemplateResponse("login.html", {"request": request, "error": 'Логин или пароль указаны неверно.'})
+        
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
@@ -114,22 +180,3 @@ async def login_for_access_token(request: Request, db: Session = Depends(get_db)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     return response
 
-@app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
-        status_code=401,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        user = get_user(db, username=username)
-        if user is None:
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
-
-    return templates.TemplateResponse("dashboard.html", {"request": request, "user": user})

@@ -33,5 +33,9 @@ class User(Base):
     hashed_password = Column(String(255))
     is_admin = Column(Boolean, default=False)
 
+    @property
+    def is_authenticated(self):
+        return True
+
 # Создание таблиц в базе данных
 Base.metadata.create_all(bind=engine)

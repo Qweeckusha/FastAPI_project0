@@ -14,7 +14,13 @@
         <label for="password">Пароль:</label>
         <input type="password" id="password" name="password" required>
         <br>
+        <div>
         <button type="submit">Войти</button>
+        <a href="/register">Регистрация</a>
+        </div>
+        {% if error or success %}
+        <p class="msg">{{error}}{{success}}</p>
+        {% endif %}
     </form>
 </body>
 </html>
