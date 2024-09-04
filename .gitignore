@@ -226,6 +226,5 @@ $RECYCLE.BIN/
 __pycache__/main.cpython-310.pyc
 __pycache__/models.cpython-310.pyc
 alembic/__pycache__/env.cpython-310.pyc
-alembic/versions/cf8877fe010a_создание_таблицы_products.py
 alembic/versions/__pycache__/404a535f715f_initial_migration.cpython-310.pyc
 alembic/versions/__pycache__/07901c353182_changed_username_unique_to_true.cpython-310.pyc
